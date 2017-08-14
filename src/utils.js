@@ -679,3 +679,13 @@ export function groupBy(xs, key) {
     return rv;
   }, {});
 }
+
+/*
+ * Build an object consisting of only defined parameters to avoid creating an
+ * object with defined keys and undefined values.
+ */
+export function getDefinedParams(object, params) {
+  return params
+    .filter(param => object[param])
+    .reduce((bid, param) => Object.assign(bid, { [param]: object[param] }), {});
+}

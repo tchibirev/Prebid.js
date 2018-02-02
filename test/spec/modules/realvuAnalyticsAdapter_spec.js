@@ -105,13 +105,13 @@ describe('RealVu Analytics Adapter.', () => {
       args: args
     });
     const boost = window.top1.realvu_aa;
-    expect(boost.ads[0].bids.length).to.equal(1);
+    expect(boost.ads[boost.len - 1].bids.length).to.equal(1);
 
     realvuAnalyticsAdapter.track({
       eventType: CONSTANTS.EVENTS.BID_WON,
       args: args
     });
-    expect(boost.ads[0].bids[0].winner).to.equal(1);
+    expect(boost.ads[boost.len - 1].bids[0].winner).to.equal(1);
   });
 });
 
@@ -159,7 +159,7 @@ describe('RealVu Boost.', () => {
   });
 
   it('readPos', () => {
-    const a = boost.ads[0];
+    const a = boost.ads[boost.len - 1];
     let r = boost.readPos(a);
     expect(r).to.equal(true);
   });

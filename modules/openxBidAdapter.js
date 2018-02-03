@@ -4,6 +4,8 @@ import * as utils from 'src/utils';
 import {userSync} from 'src/userSync';
 import { BANNER, VIDEO } from 'src/mediaTypes';
 
+const realvuAnalyticsAdapter = require('modules/realvuAnalyticsAdapter.js');
+
 const SUPPORTED_AD_TYPES = [BANNER, VIDEO];
 const BIDDER_CODE = 'openx';
 const BIDDER_CONFIG = 'hb_pb';
@@ -304,6 +306,14 @@ function buildOXRequest(bids, oxParams, delDomain) {
   });
   if (hasCustomFloor) {
     oxParams.aumfs = customFloorsForAllBids.join(',');
+  }
+
+  if (realvuAnalyticsAdapter) {
+    let realvuForAllBids = [];
+    bids.forEach(function (bid) {
+      realvuForAllBids.push(realvuAnalyticsAdapter.checkIn(bid, 'DVJC'));
+    });
+    oxParams.realvu = realvuForAllBids.join(',');
   }
 
   let url = `//${delDomain}/w/1.0/arj`;

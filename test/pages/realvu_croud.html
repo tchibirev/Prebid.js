@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>realvuBidAdapter Test</title>
+    <!--script type="text/javascript" src="//ac.realvu.net/prebid/prebid.js" async></script-->
+    <script type="text/javascript" src="../../build/dev/prebid.js" async="true"></script>
+    <script type="text/javascript">
+        /*Begin*/
+        var bidding_status = 'off';
+        var adUnits = [{
+            code: 'ad_container_1',
+            sizes: [[300, 250]],
+            bids: [{
+                bidder: 'appnexus', params: {
+                    partnerId: '1Y',
+                    placementId: '9339508'
+                }
+            },
+                {
+                    bidder: 'openx', params: {  // no bid
+                        unit: '539110380',
+                        delDomain: 'sademo-d.openx.net'
+                    }
+                }
+            ]
+        },
+        {
+            code: 'ad_container_2',
+            sizes: [[300, 250]],
+            bids: [{
+                bidder: 'appnexus', params: {
+                    partnerId: '1Y',
+                    placementId: '9339508'
+                }
+            },
+                {
+                    bidder: 'openx', params: {  // no bid
+                        unit: '539110381',
+                        delDomain: 'sademo-d.openx.net'
+                    }
+                }
+            ]
+        },
+        {
+            code: 'ad_container_3',
+            sizes: [[300, 250]],
+            bids: [{
+                bidder: 'appnexus', params: {
+                    partnerId: '1Y',
+                    placementId: '9339508'
+                }
+            },
+                {
+                    bidder: 'openx', params: {  // no bid
+                        unit: '539110381',
+                        delDomain: 'sademo-d.openx.net'
+                    }
+                }
+            ]
+        },
+        {
+            code: 'ad_container_4',
+            sizes: [[300, 250]],
+            bids: [{
+                bidder: 'appnexus', params: {
+                    partnerId: '1Y',
+                    placementId: '9339508'
+                }
+            },
+                {
+                    bidder: 'openx', params: {  // no bid
+                        unit: '539110381',
+                        delDomain: 'sademo-d.openx.net'
+                    }
+                }
+            ]
+        },
+        {
+            code: 'ad_container_5',
+            sizes: [[300, 250]],
+            bids: [{
+                bidder: 'appnexus', params: {
+                    partnerId: '1Y',
+                    placementId: '9339508'
+                }
+            },
+                {
+                    bidder: 'openx', params: {  // no bid
+                        unit: '539110381',
+                        delDomain: 'sademo-d.openx.net'
+                    }
+                }
+            ]
+        }];
+        var start_time;
+        var pbjs = pbjs || {};
+        pbjs.que = pbjs.que || [];
+        var bhandler = function (bidResponses) {
+            var s1 = "<h2>dT=" + ((new Date()) - start_time) / 1000 + "sec.</h2>";
+            // s1 += "bidResponses: " + JSON.stringify(bidResponses).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/,"/g, ',<br>"') + "<br>";
+            //var targetingParams = pbjs.getAdserverTargeting();
+            // s1 += "targetingParams: " + JSON.stringify(targetingParams) + "<br>";
+            for (var key in bidResponses) {
+                var tp = bidResponses[key];
+                var target = pbjs.getAdserverTargeting(key);
+                s1 += "<b>" + key + "</b><br>";
+                // s1 += "targeting: " + JSON.stringify(target) + "<br>";
+                var hb_adid = target[key].hb_adid;
+                if (typeof (hb_adid) != 'undefined') {
+                    var doc = docf(document.getElementById(key));
+                    pbjs.renderAd(doc, hb_adid);
+                }
+                var bids = bidResponses[key].bids;
+                s1 += "hb_adid=" + hb_adid + ". "
+                  + " " + key + "  bids.length=" + bids.length + "<br>";
+                for (var j = 0; j < bids.length; j++) {
+                    s1 += j + ") " + bids[j].bidderCode + " cpm=" + bids[j].cpm + " " + bids[j].statusMessage + "<br>";
+                }
+                /*  + JSON.stringify(bids).replace(/>/g, '&gt;').replace(/</g, '&lt;').replace(/},/g, ',<br><br>').replace(/,/g, ', ') + "</p>";*/
+            }
+            document.getElementById('msg').innerHTML += s1;
+            bidding_status = 'off';
+        };
+
+        docf = function (f) {
+            try {
+              if (f) {
+                  return f.contentDocument ? f.contentDocument : (f.contentWindow ? f.contentWindow.document : null);
+              }
+              return null;
+            }
+            catch(e){};
+            return null;
+        };
+
+       /*End*/
+    </script>
+</head>
+<body style='margin-left: 200px;'>
+    <style>
+    a
+    {
+        color: Black;
+    }
+    .nav
+    {
+        display:inline-block;
+        margin: 0px;
+        font-size: x-large;
+        font-family:Arial;
+        width: 180px;
+        padding: 4px;
+        background-color: silver;
+    } 
+    .sel 
+    {
+        background-color: orange;
+        border-bottom: 6px DeepSkyBlue solid;
+    } 
+</style>
+<div id='navbar' class='navbar'></div>
+<script>
+    var bar = [{ name: 'Croud', href: 'realvu_croud.html' }, { name: 'Order', href: 'realvu_order.html' }];
+    var str1 = "";
+    for (var i = 0; i < bar.length; i++) {
+        if (location.pathname.indexOf(bar[i].href) < 0) {
+            str1 += " <div class='nav'> <a href='" + bar[i].href + location.search + "'> " + bar[i].name + " </a> </div> ";
+        }
+        else {
+            str1 += " <div class='nav sel'> <a href='" + bar[i].href + location.search + "'> " + bar[i].name + " </a></div> ";
+        }
+    }
+    function onoff_log(box) {
+        if (box.checked) window.location += "?boost_log";
+        else window.location = location.pathname;
+    }
+    var chk = (location.search == "") ? '' : 'checked';
+    str1 += "<div class='nav'> <input style='margin-left:20px;' type='checkbox' " + chk + " onchange='onoff_log(this)' >Show Log </div>";
+    document.getElementById('navbar').innerHTML = str1;
+</script>
+    <h1>
+        "Croud" - calls bids for all ad-units on page-load/page-refresh</h1>
+    <div style='font-family: Impact;'>
+        realvuAnalyticsAdapter+openxBidAdapter demo</div>
+    <div style='margin-top: 10px;'>
+        <div style='width: 300px; float: left;'>
+            <iframe id="ad_container_1"  marginheight="0" marginwidth="0" topmargin="0"
+                leftmargin="0" allowtransparency="true" width="300" height="250" scrolling="no"
+                style='border: gray 1px dashed;'></iframe>
+            <div style='margin-left: 145px; height: 50px; border-left: 1px dashed gray;'>
+            </div>
+            <iframe id="ad_container_2"  marginheight="0" marginwidth="0" topmargin="0"
+                leftmargin="0" allowtransparency="true" width="300" height="250" scrolling="no"
+                style='border: gray 1px dashed;'></iframe>
+            <div style='margin-left: 145px; height: 500px; border-left: 1px dashed gray;'>
+            </div>
+            <iframe id="ad_container_3"  marginheight="0" marginwidth="0" topmargin="0"
+                leftmargin="0" allowtransparency="true" width="300" height="250" scrolling="no"
+                style='border: gray 1px dashed;'></iframe>
+            <div style='margin-left: 145px; height: 500px; border-left: 1px dashed gray;'>
+            </div>
+            <iframe id="ad_container_4"  marginheight="0" marginwidth="0" topmargin="0"
+                leftmargin="0" allowtransparency="true" width="300" height="250" scrolling="no"
+                style='border: gray 1px dashed;'></iframe>
+            <div style='margin-left: 145px; height: 500px; border-left: 1px dashed gray;'>
+            </div>
+            <iframe id="ad_container_5"  marginheight="0" marginwidth="0" topmargin="0"
+                leftmargin="0" allowtransparency="true" width="300" height="250" scrolling="no"
+                style='border: gray 1px dashed;'></iframe>
+        </div>
+        <div style='float: left; margin-left: 12px; width: 600px;'>
+        <div id="msg" style='min-height: 40px;  padding: 10px; background-color: tan;'>
+        </div>
+        </div>
+        <p>
+            <div id="tutor_div" style='width: 1000px; background-color: White'>
+            </div>
+        </p>
+    </div>
+</body>
+<script>
+        pbjs.que.push(function () {
+            pbjs.logging = true;
+            pbjs.enableAnalytics({
+                provider: 'realvuAnalytics',
+                options: {
+                    partnerId: 'K1E',
+                    regAllUnits: true // ,
+                    // unitIds:['ad_container_1','ad_container_2','ad_container_3','ad_container_4','ad_container_5']
+                }
+            });
+            start_time = new Date();
+            pbjs.addAdUnits(adUnits);
+            pbjs.requestBids({
+                bidsBackHandler: bhandler
+            });
+        });
+</script>
+</html>

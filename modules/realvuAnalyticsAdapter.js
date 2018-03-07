@@ -446,7 +446,7 @@ window.top1.realvu_aa = window.top1.realvu_aa || {
     // returns the object or null
     if (a == null) return a;
     if (a.nodeType == Node.TEXT_NODE) {
-      var dc = adi.ownerDocument;
+      var dc = a.ownerDocument;
       var wnd = dc.defaultView || dc.parentWindow;
       var par = a.parentNode;
       if (wnd == wnd.top) {
@@ -626,8 +626,6 @@ window.top1.realvu_aa = window.top1.realvu_aa || {
         pin.vt = 0; // view time
         pin.state = 0;
         a.pins.push(pin);
-      } else {
-        a.pins[0].partner_id = pin.partner_id;
       }
       if (this.sr === '') {
         z.track(a, 'conf', '');
@@ -856,7 +854,7 @@ window.top1.realvu_aa = window.top1.realvu_aa || {
         var nr = parseInt(vr[1], 10);
         var sv = 0;
         var sr = 0;
-        for (nr &= 0x3FF; nr > 0; nr >>>= 1, nv >>>= 1) { // count 10 deliveries  
+        for (nr &= 0x3FF; nr > 0; nr >>>= 1, nv >>>= 1) { // count 10 deliveries
           if (nr & 0x1) sr++;
           if (nv & 0x1) sv++;
         }
@@ -929,21 +927,11 @@ realvuAnalyticsAdapter.track = function ({eventType, args}) {
   }
 };
 
-// xyzBidAdapter calls checkin() to obtain "yes/no" viewability 
+// xyzBidAdapter calls checkin() to obtain "yes/no" viewability
 realvuAnalyticsAdapter.checkIn = function (bid, partnerId) {
-  // find (or add if not registered yet) the unit in boost 
+  // find (or add if not registered yet) the unit in boost
   if (typeof (partnerId) == 'undefined' || partnerId == '') {
     utils.logError('Missed realvu.com partnerId parameter', 102, 'Missed partnerId parameter');
-  }
-  if (Object.keys(_options).length === 0) { // analytics is not enabled yet
-    adaptermanager.enableAnalytics({
-      provider: 'realvuAnalytics',
-      options: {
-        partnerId: partnerId,
-        regAllUnits: false,
-        unitIds: [bid.adUnitCode]
-      }
-    });
   }
   var a = window.top1.realvu_aa.check({
     unit_id: bid.adUnitCode,

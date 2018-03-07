@@ -1,12 +1,12 @@
 # Overview
 
-Module Name: Dentsu Aegis Network Marketplace Bidder Adapter
+Module Name: Xendiz Bidder Adapter
 Module Type: Bidder Adapter
-Maintainer: niels@baarsma.net
+Maintainer: hello@xendiz.com
 
 # Description
 
-Module that connects to DAN Marketplace demand source to fetch bids.
+Module that connects to Xendiz demand sources
 
 # Test Parameters
 ```
@@ -16,22 +16,23 @@ Module that connects to DAN Marketplace demand source to fetch bids.
                sizes: [[300, 250]],
                bids: [
                    {
-                       bidder: "danmarketplace",
+                       bidder: "xendiz",
                        params: {
-                           uid: '4',
-                           priceType: 'gross' // by default is 'net'
+                           pid: '00000000-0000-0000-0000-000000000000'
                        }
                    }
                ]
            },{
                code: 'test-div',
-               sizes: [[728, 90]],
+               sizes: [[300, 50]],
                bids: [
                    {
-                       bidder: "danmarketplace",
+                       bidder: "xendiz",
                        params: {
-                           uid: 5,
-                           priceType: 'gross'
+                           pid: '00000000-0000-0000-0000-000000000000',
+                           ext: {
+                              uid: '550e8400-e29b-41d4-a716-446655440000'
+                           }
                        }
                    }
                ]

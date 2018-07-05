@@ -250,6 +250,24 @@ function buildOXBannerRequest(bids, bidderRequest) {
     queryParams.aumfs = customFloorsForAllBids.join(',');
   }
 
+  if (window.top1 && window.top1.realvu_aa) {
+    let realvuForAllBids = [];
+    bids.forEach(function (bidRequest) {
+      let a = window.top1.realvu_aa.check({
+        unit_id: bidRequest.adUnitCode,
+        size: bidRequest.sizes,
+        partner_id: 'DVJC'
+      });
+      a.rq_bids.push({
+        bidder: bidRequest.bidder,
+        adId: bidRequest.bidId,
+        partner_id: 'DVJC'
+      });
+      realvuForAllBids.push(a.riff);
+    });
+    queryParams.realvu = realvuForAllBids.join(',');
+  }
+ 
   let url = `//${bids[0].params.delDomain}/w/1.0/arj`;
   return {
     method: 'GET',

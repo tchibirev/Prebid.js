@@ -105,6 +105,8 @@
   "dependencies": {
     "babel-plugin-transform-object-assign": "^6.22.0",
     "core-js": "^2.4.1",
+    "eslint-config-google": "^0.9.1",
+    "eslint-plugin-html": "^4.0.5",
     "gulp-sourcemaps": "^2.6.0",
     "just-clone": "^1.0.2"
   }
